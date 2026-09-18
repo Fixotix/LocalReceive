@@ -1,0 +1,41 @@
+# Dependencies
+node_modules/
+**/node_modules/
+
+# Logs & Temporary
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.DS_Store
+.AppleDouble
+.LSOverride
+tmp/
+
+# Android Native App & Binaries (Private - Do NOT push to GitHub)
+android-lite/
+android-app/
+*.apk
+LocalReceive.apk
+LocalReceive-package
+**/LocalReceive.apk
+**/LocalReceive-package
+.gradle/
+**/.gradle/
+build/
+**/build/
+app/build/
+**/app/build/
+local.properties
+**/local.properties
+.idea/
+**/.idea/
+*.iml
+
+# Firebase & Cloud Deployment Configs
+.firebase/
+.firebaserc
+firebase.json
+
+# Web Dist
+web/dist/

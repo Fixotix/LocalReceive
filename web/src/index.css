@@ -1,0 +1,326 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 9%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 9%;
+    --primary: 38 92% 50%;
+    --primary-foreground: 0 0% 10%;
+    --secondary: 0 0% 96.1%;
+    --secondary-foreground: 0 0% 9%;
+    --muted: 0 0% 96.1%;
+    --muted-foreground: 0 0% 45.1%;
+    --accent: 38 92% 50%;
+    --accent-foreground: 0 0% 10%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 89.8%;
+    --input: 0 0% 89.8%;
+    --ring: 38 92% 50%;
+    --radius: 0.75rem;
+    --sat: env(safe-area-inset-top, 0px);
+    --sab: env(safe-area-inset-bottom, 0px);
+    --sal: env(safe-area-inset-left, 0px);
+    --sar: env(safe-area-inset-right, 0px);
+  }
+
+  .dark {
+    --background: 0 0% 4%;
+    --foreground: 0 0% 98%;
+    --card: 0 0% 7%;
+    --card-foreground: 0 0% 98%;
+    --popover: 0 0% 7%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 38 92% 50%;
+    --primary-foreground: 0 0% 10%;
+    --secondary: 0 0% 13%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 0 0% 13%;
+    --muted-foreground: 0 0% 64%;
+    --accent: 38 92% 50%;
+    --accent-foreground: 0 0% 10%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 17%;
+    --input: 0 0% 17%;
+    --ring: 38 92% 50%;
+  }
+
+  *, ::before, ::after {
+    border-color: hsl(var(--border));
+    font-family: 'DM Sans', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  }
+
+  html, body, button, input, select, textarea, p, h1, h2, h3, h4, h5, h6, span, a, div {
+    font-family: 'DM Sans', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  }
+
+  body {
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    padding-left: env(safe-area-inset-left, 0px);
+    padding-right: env(safe-area-inset-right, 0px);
+  }
+}
+
+/* Apple Liquid Glass Utility Classes - Dark Mode */
+.glass-panel-dark {
+  background: rgba(28, 28, 30, 0.65);
+  backdrop-filter: blur(28px) saturate(190%);
+  -webkit-backdrop-filter: blur(28px) saturate(190%);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: 0 16px 40px 0 rgba(0, 0, 0, 0.45);
+}
+
+/* Apple Liquid Glass Utility Classes - Pristine Light Mode */
+.glass-panel-light {
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(28px) saturate(190%);
+  -webkit-backdrop-filter: blur(28px) saturate(190%);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 16px 40px 0 rgba(0, 0, 0, 0.06);
+}
+
+/* Top Specular Highlight Gradient Line */
+.glass-highlight {
+  position: relative;
+}
+
+.glass-highlight::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1.5px;
+  background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.35) 50%, rgba(255,255,255,0) 100%);
+  pointer-events: none;
+}
+
+.glass-highlight-light::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1.5px;
+  background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.9) 50%, rgba(255,255,255,0) 100%);
+  pointer-events: none;
+}
+
+/* 3D Glass Floating Hover Effect */
+.card-3d {
+  transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.3s ease;
+  transform-style: preserve-3d;
+}
+
+.card-3d:hover {
+  transform: translateY(-4px) scale(1.01);
+}
+
+/* Hide scrollbar */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* ============================================================ */
+/* transitions.dev — Prototype 27 Spring Double-Bounce Toggle   */
+/* ============================================================ */
+:root {
+  --p27-dur: 350ms;
+  --p27-travel: 20px;
+  --p27-ov1: 2.5px;
+  --p27-ov2: 1px;
+  --p27-ease: cubic-bezier(0.34, 1.35, 0.64, 1);
+  --spring-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.p27-switch {
+  position: relative;
+  width: 48px;
+  height: 26px;
+  border-radius: 9999px;
+  padding: 0;
+  cursor: pointer;
+  background: rgba(120, 120, 128, 0.24);
+  transition: background 250ms ease, box-shadow 250ms ease;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+  display: inline-flex;
+  align-items: center;
+}
+
+.p27-switch[data-on="true"] {
+  background: #E5A93C;
+  box-shadow: 0 0 14px rgba(229, 169, 60, 0.45);
+}
+
+.p27-thumb {
+  position: absolute;
+  left: 3px;
+  top: 3px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.22), 0 0 1px rgba(0, 0, 0, 0.35);
+  translate: 0 0;
+  will-change: translate;
+}
+
+.p27-switch[data-on="true"] .p27-thumb {
+  translate: var(--p27-travel) 0;
+}
+
+.p27-switch.is-init[data-on="true"] .p27-thumb {
+  animation: p27-on var(--p27-dur) var(--p27-ease) both;
+}
+
+.p27-switch.is-init[data-on="false"] .p27-thumb {
+  animation: p27-off var(--p27-dur) var(--p27-ease) both;
+}
+
+@keyframes p27-on {
+  0%   { translate: 0 0; }
+  55%  { translate: calc(var(--p27-travel) + var(--p27-ov1)) 0; }
+  80%  { translate: calc(var(--p27-travel) - var(--p27-ov2)) 0; }
+  100% { translate: var(--p27-travel) 0; }
+}
+
+@keyframes p27-off {
+  0%   { translate: var(--p27-travel) 0; }
+  55%  { translate: calc(0px - var(--p27-ov1)) 0; }
+  80%  { translate: var(--p27-ov2) 0; }
+  100% { translate: 0 0; }
+}
+
+/* transitions.dev tactile spring press on interactive buttons */
+.spring-press {
+  transition: transform 180ms cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 180ms ease;
+}
+.spring-press:active {
+  transform: scale(0.96);
+}
+
+/* transitions.dev / efferd.com Shimmer sweep */
+@keyframes shimmer-sweep {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(200%); }
+}
+
+.shimmer-sweep {
+  position: relative;
+  overflow: hidden;
+}
+
+.shimmer-sweep::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.25), transparent);
+  transform: translateX(-100%);
+}
+
+.shimmer-sweep:hover::after {
+  animation: shimmer-sweep 1.2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+/* efferd.com architectural top shade and borders */
+.top-shade {
+  position: relative;
+}
+.top-shade::before {
+  content: '';
+  position: absolute;
+  inset-x: 0;
+  top: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  pointer-events: none;
+}
+.dark .top-shade::before {
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+}
+
+/* transitions.dev P33 Matrix Dot Loader */
+@keyframes matrix-dot-pulse {
+  0%, 100% {
+    opacity: 0.18;
+    transform: scale(0.75);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.25);
+  }
+}
+
+.animate-matrix-pulse {
+  animation: matrix-dot-pulse 1.3s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+/* transitions.dev P28 Shimmer Continuous Sweep */
+@keyframes shimmer-sweep-loop {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.shimmer-sweep-continuous {
+  background: linear-gradient(
+    90deg,
+    currentColor 0%,
+    #E5A93C 35%,
+    currentColor 70%
+  );
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  animation: shimmer-sweep-loop 2.8s linear infinite;
+}
+
+/* Solar Icons / Tactile 3D Radial Stage & Noise Texture */
+.bg-noise {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.035'/%3E%3C/svg%3E");
+}
+
+.radial-disc-1 {
+  box-shadow: 0 -22px 45px -8px rgba(0, 0, 0, 0.06), inset 0 1px 1px 0 rgba(255, 255, 255, 0.7);
+}
+.dark .radial-disc-1 {
+  box-shadow: 0 -22px 50px -8px rgba(0, 0, 0, 0.45), inset 0 1px 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.radial-disc-2 {
+  box-shadow: 0 -18px 35px -6px rgba(0, 0, 0, 0.08), inset 0 1px 1px 0 rgba(255, 255, 255, 0.8);
+}
+.dark .radial-disc-2 {
+  box-shadow: 0 -18px 40px -6px rgba(0, 0, 0, 0.5), inset 0 1px 1px 0 rgba(255, 255, 255, 0.09);
+}
+
+.radial-disc-3 {
+  box-shadow: 0 -14px 28px -4px rgba(0, 0, 0, 0.1), inset 0 1px 1px 0 rgba(255, 255, 255, 0.9);
+}
+.dark .radial-disc-3 {
+  box-shadow: 0 -14px 30px -4px rgba(0, 0, 0, 0.55), inset 0 1px 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+

@@ -1,0 +1,30 @@
+{
+  "name": "localreceive",
+  "version": "1.0.0",
+  "description": "Ultra-Fast Local Network (LAN) AirDrop & Peer-to-Peer File Sharing",
+  "scripts": {
+    "postinstall": "npm install --prefix server && npm install --prefix web",
+    "setup": "npm install --prefix server && npm install --prefix web && npm run build",
+    "start": "npm run start --prefix server",
+    "dev": "npm run dev --prefix server",
+    "build": "npm run build --prefix web && node -e \"require('fs').cpSync('web/dist', 'server/public', {recursive: true})\" && npm run build --prefix server",
+    "web": "npm run dev --prefix web",
+    "server": "npm run dev --prefix server"
+  },
+  "keywords": [
+    "airdrop",
+    "webrtc",
+    "file-transfer",
+    "lan-sharing",
+    "local-network",
+    "high-speed",
+    "offline"
+  ],
+  "author": "Fixotix",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Fixotix/LocalReceive.git"
+  },
+  "homepage": "https://github.com/Fixotix/LocalReceive#readme"
+}
