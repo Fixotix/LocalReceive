@@ -23,9 +23,7 @@ export const App: React.FC = () => {
     return saved ? saved === 'dark' : true;
   });
 
-  const [autoAccept, setAutoAccept] = useState(() => {
-    return (localStorage.getItem('localreceive_auto_accept') || localStorage.getItem('localhere_auto_accept')) === 'true';
-  });
+  const [autoAccept, setAutoAccept] = useState(false);
 
   const [hostInfo, setHostInfo] = useState<HostInfo | null>(null);
   const [myPeer, setMyPeer] = useState<Peer | null>(null);
@@ -278,8 +276,22 @@ export const App: React.FC = () => {
         setActiveTransfer(incomingTransfer);
 
         if (autoAccept) {
-          handleAcceptTransfer();
+          handleAcceptTransfer(incomingTransfer);
         }
+      },
+      onFileProgress: (prog) => {
+        setActiveTransfer((prev) => {
+          if (!prev || prev.id !== prog.transferId) return prev;
+          return {
+            ...prev,
+            status: 'transferring',
+            bytesTransferred: prog.bytesTransferred,
+            totalBytes: prog.totalBytes,
+            progressPercent: prog.totalBytes > 0 ? (prog.bytesTransferred / prog.totalBytes) * 100 : 0,
+            speedMBs: prog.speedMBs,
+            etaSeconds: prog.etaSeconds,
+          };
+        });
       },
       onFileResponse: async (resp) => {
         if (resp.accepted) {
@@ -345,6 +357,18 @@ export const App: React.FC = () => {
                         etaSeconds: eta,
                       };
                     });
+
+                    // Forward real-time progress to receiver
+                    signalingRef.current?.sendDirect(targetPeer.id, {
+                      type: 'file-progress',
+                      to: targetPeer.id,
+                      from: myPeer?.id,
+                      transferId,
+                      bytesTransferred: bytesSent,
+                      totalBytes: total,
+                      speedMBs,
+                      etaSeconds: eta,
+                    });
                   }
                 );
 
@@ -360,6 +384,12 @@ export const App: React.FC = () => {
                 setActiveTransfer((prev) =>
                   prev ? { ...prev, status: 'error', error: 'Upload failed over LAN.' } : null
                 );
+                signalingRef.current?.sendDirect(targetPeer.id, {
+                  type: 'file-cancel',
+                  to: targetPeer.id,
+                  from: myPeer?.id,
+                  transferId,
+                });
               }
             }
           }
@@ -559,14 +589,15 @@ export const App: React.FC = () => {
   };
 
   // Recipient Accepts Incoming Transfer
-  const handleAcceptTransfer = () => {
-    if (!activeTransfer) return;
+  const handleAcceptTransfer = (transferToAccept?: ActiveTransfer) => {
+    const current = transferToAccept || activeTransfer;
+    if (!current) return;
 
-    signalingRef.current?.sendDirect(activeTransfer.peer.id, {
+    signalingRef.current?.sendDirect(current.peer.id, {
       type: 'file-response',
-      to: activeTransfer.peer.id,
+      to: current.peer.id,
       from: myPeer?.id,
-      transferId: activeTransfer.id,
+      transferId: current.id,
       accepted: true,
     });
 
@@ -574,13 +605,13 @@ export const App: React.FC = () => {
       const rtc = new WebRTCConnection(
         false,
         (sig) =>
-          signalingRef.current?.sendDirect(activeTransfer.peer.id, {
+          signalingRef.current?.sendDirect(current.peer.id, {
             type: 'signal',
-            to: activeTransfer.peer.id,
+            to: current.peer.id,
             from: myPeer?.id,
             data: sig,
           }),
-        (file) => handleWebRTCFileReceived(file, activeTransfer.peer.id),
+        (file) => handleWebRTCFileReceived(file, current.peer.id),
         (bytes, total, speed, eta) => {
           setActiveTransfer((prev) =>
             prev
@@ -595,11 +626,13 @@ export const App: React.FC = () => {
           );
         }
       );
-      webrtcConnectionsRef.current.set(activeTransfer.peer.id, rtc);
+      webrtcConnectionsRef.current.set(current.peer.id, rtc);
     }
 
     setActiveTransfer((prev) =>
-      prev ? { ...prev, status: 'transferring', progressPercent: 15 } : null
+      prev
+        ? { ...prev, status: 'transferring', progressPercent: 5 }
+        : { ...current, status: 'transferring', progressPercent: 5 }
     );
   };
 

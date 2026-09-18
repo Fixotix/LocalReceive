@@ -9,6 +9,7 @@ export type SignalMessage =
   | { type: 'signal'; to: string; from: string; data: any }
   | { type: 'file-offer'; to: string; from: string; fromName: string; transferId: string; files: any[] }
   | { type: 'file-response'; to: string; from: string; transferId: string; accepted: boolean; reason?: string }
+  | { type: 'file-progress'; to: string; from: string; transferId: string; bytesTransferred: number; totalBytes: number; speedMBs: number; etaSeconds: number }
   | { type: 'file-ready'; to: string; from: string; transferId: string; downloadUrl?: string; files: any[] }
   | { type: 'file-completed'; to: string; from: string; transferId: string }
   | { type: 'file-cancel'; to: string; from: string; transferId: string }
@@ -20,6 +21,7 @@ export interface SignalingEvents {
   onSignal: (from: string, data: any) => void;
   onFileOffer: (offer: { from: string; fromName: string; transferId: string; files: any[] }) => void;
   onFileResponse: (resp: { from: string; transferId: string; accepted: boolean; reason?: string }) => void;
+  onFileProgress?: (progress: { from: string; transferId: string; bytesTransferred: number; totalBytes: number; speedMBs: number; etaSeconds: number }) => void;
   onFileReady: (ready: { from: string; transferId: string; downloadUrl?: string; files: any[] }) => void;
   onFileCompleted: (comp: { from: string; transferId: string }) => void;
   onFileCancel: (canc: { from: string; transferId: string }) => void;
@@ -407,6 +409,16 @@ export class SignalingService {
           transferId: msg.transferId,
           accepted: msg.accepted,
           reason: msg.reason,
+        });
+        break;
+      case 'file-progress':
+        this.events.onFileProgress?.({
+          from: msg.from,
+          transferId: msg.transferId,
+          bytesTransferred: msg.bytesTransferred,
+          totalBytes: msg.totalBytes,
+          speedMBs: msg.speedMBs,
+          etaSeconds: msg.etaSeconds,
         });
         break;
       case 'file-ready':

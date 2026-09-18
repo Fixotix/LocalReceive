@@ -154,6 +154,22 @@ class SignalingServer {
                 }
                 break;
             }
+            case 'file-progress': {
+                const { to, from, transferId, bytesTransferred, totalBytes, speedMBs, etaSeconds } = msg;
+                const target = this.peers.get(to);
+                if (target && target.ws.readyState === ws_1.WebSocket.OPEN) {
+                    this.send(target.ws, {
+                        type: 'file-progress',
+                        from,
+                        transferId,
+                        bytesTransferred,
+                        totalBytes,
+                        speedMBs,
+                        etaSeconds,
+                    });
+                }
+                break;
+            }
             case 'text-share': {
                 const { to, from, text } = msg;
                 const target = this.peers.get(to);
